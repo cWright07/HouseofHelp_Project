@@ -22,10 +22,10 @@ class HelpMeFastApp extends StatelessWidget {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
       useMaterial3: true,
-     cardTheme: CardThemeData(
-  elevation: 4,
-  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-),
+      cardTheme: CardThemeData(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      ),
     );
   }
 }
@@ -43,7 +43,6 @@ class _LandingPageState extends State<LandingPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  // Menu items defined as data, not hardcoded in the build tree
   static const List<_MenuItemData> _menuItems = [
     _MenuItemData(Icons.person_add,  'New Client',     Colors.blue,   'Register a new client'),
     _MenuItemData(Icons.history,     'Recent Visits',  Colors.orange, 'View latest check-ins'),
@@ -53,14 +52,13 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   void dispose() {
-    _searchController.dispose(); // Prevent memory leaks
+    _searchController.dispose();
     super.dispose();
   }
 
   void _onSearch(String value) => setState(() => _searchQuery = value);
 
   void _onMenuTap(_MenuItemData item) {
-    // TODO(Sprint 2): Navigate to each section
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Opening ${item.label}…'),
@@ -85,7 +83,7 @@ class _LandingPageState extends State<LandingPage> {
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             tooltip: 'Notifications',
-            onPressed: () {}, // TODO(Sprint 2)
+            onPressed: () {},
           ),
         ],
       ),
@@ -121,7 +119,6 @@ class _LandingPageState extends State<LandingPage> {
 
 // ─── Sub-widgets ─────────────────────────────────────────────────────────────
 
-/// Greeting banner — reacts to live search feedback
 class _WelcomeBanner extends StatelessWidget {
   const _WelcomeBanner({required this.searchQuery});
   final String searchQuery;
@@ -148,7 +145,6 @@ class _WelcomeBanner extends StatelessWidget {
   }
 }
 
-/// Extracted search bar — single responsibility
 class _SearchBar extends StatelessWidget {
   const _SearchBar({required this.controller, required this.onChanged});
   final TextEditingController controller;
@@ -184,7 +180,6 @@ class _SearchBar extends StatelessWidget {
   }
 }
 
-/// Extracted grid — easier to unit-test and reuse
 class _MenuGrid extends StatelessWidget {
   const _MenuGrid({required this.items, required this.onTap});
   final List<_MenuItemData> items;
@@ -204,7 +199,6 @@ class _MenuGrid extends StatelessWidget {
   }
 }
 
-/// Individual card — self-contained
 class _MenuCard extends StatelessWidget {
   const _MenuCard({required this.item, required this.onTap});
   final _MenuItemData item;
@@ -223,7 +217,7 @@ class _MenuCard extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 28,
-                backgroundColor: item.color.withValues(alpha: 0.15),
+                backgroundColor: item.color.withOpacity(0.15), // ← fixed here
                 child: Icon(item.icon, size: 28, color: item.color),
               ),
               const SizedBox(height: 10),
@@ -250,7 +244,6 @@ class _MenuCard extends StatelessWidget {
 
 // ─── Data model ──────────────────────────────────────────────────────────────
 
-/// Immutable value object — keeps UI and data separate
 class _MenuItemData {
   const _MenuItemData(this.icon, this.label, this.color, this.subtitle);
   final IconData icon;
